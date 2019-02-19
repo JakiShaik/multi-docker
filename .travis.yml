@@ -22,4 +22,4 @@ after_success:
   - docker push jockerd/multi-client
   - docker push jockerd/multi-nginx
   - docker push jockerd/multi-server
-  - docekr push jockerd/multi-worker 
+  - docker push jockerd/multi-worker 
