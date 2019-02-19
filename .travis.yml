@@ -1,0 +1,25 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t jockerd/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run jockerd/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t jockerd/multi-client ./client
+  - docker build -t jockerd/multi-nginx ./nginx
+  - docker build -t jockerd/multi-server ./server
+  - docker build -t jockerd/multi-worker ./worker
+
+  #Login to the Docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+
+  #Take these images and  push them to docker hub
+  - docker push jockerd/multi-client
+  - docker push jockerd/multi-nginx
+  - docker push jockerd/multi-server
+  - docekr push jockerd/multi-worker 
